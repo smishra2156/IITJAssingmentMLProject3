@@ -75,9 +75,13 @@ if submitted:
     st.write(input_data)
 
 try:
-    prediction = pipeline.predict(input_data)[0]
-    prob = pipeline.predict_proba(input_data)[0][1]
+    input_data_as_np_array = np.array(input_data)
+    input_data_as_np_reshaped = input_data_as_np_array.reshape(1, -1)
+    input_data_scaled = pipeline.transform(input_data_as_np_reshaped)
+    prediction = pipeline.predict(input_data_scaled)[0]
+    #prediction = pipeline.predict(input_data)[0]
+    #prob = pipeline.predict_proba(input_data)[0][1]
     st.success(f"Prediction: {'Diabetic' if prediction == 1 else 'Non-Diabetic'}")
-    st.write(f"Probability of Diabetes: {prob:.2%}")
+    #st.write(f"Probability of Diabetes: {prob:.2%}")
 except Exception as e:
     st.error(f"Prediction failed: {e}")
